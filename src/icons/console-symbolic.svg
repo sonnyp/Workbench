@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <rect fill-opacity="0.05" height="16" width="16"/>
+        </g>
+    </mask>
+    <radialGradient id="c" cx="63.999996" cy="194.190475" gradientTransform="matrix(4.297522 -0.00000073 0.00000028 1.510489 -203.041412 -185.014933)" gradientUnits="userSpaceOnUse" r="44">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0.094118"/>
+    </radialGradient>
+    <clipPath id="d">
+        <rect height="152" width="192"/>
+    </clipPath>
+    <g clip-path="url(#d)" mask="url(#b)" transform="matrix(1 0 0 1 -168 -16)">
+        <path d="m 112 112 h -80 v -72 h 80 z m 0 0" fill="url(#c)"/>
+    </g>
+    <g fill="#241f31">
+        <path d="m 2.1875 1 c -1.207031 0 -2.1875 1.015625 -2.1875 2.21875 v 9.5625 c 0 1.203125 0.980469 2.21875 2.1875 2.21875 h 11.625 c 1.207031 0 2.1875 -1.015625 2.1875 -2.21875 v -9.5625 c 0 -1.203125 -0.980469 -2.21875 -2.1875 -2.21875 z m 0 2 h 11.625 c 0.121094 0 0.1875 0.082031 0.1875 0.21875 v 9.5625 c 0 0.136719 -0.066406 0.21875 -0.1875 0.21875 h -11.625 c -0.121094 0 -0.1875 -0.082031 -0.1875 -0.21875 v -9.5625 c 0 -0.136719 0.066406 -0.21875 0.1875 -0.21875 z m 0 0"/>
+        <path d="m 4.3125 4.90625 c -0.214844 0.054688 -0.382812 0.222656 -0.4375 0.441406 c -0.050781 0.214844 0.019531 0.441406 0.1875 0.589844 l 1.5625 1.5625 l -1.5625 1.5625 c -0.242188 0.242188 -0.242188 0.632812 0 0.875 s 0.632812 0.242188 0.875 0 l 2 -2 c 0.121094 -0.113281 0.1875 -0.273438 0.1875 -0.4375 s -0.066406 -0.324219 -0.1875 -0.4375 l -2 -2 c -0.160156 -0.167969 -0.402344 -0.230469 -0.625 -0.15625 z m 0 0"/>
+        <path d="m 8 9 h 3 v 1 h -3 z m 0 0"/>
+    </g>
+</svg>

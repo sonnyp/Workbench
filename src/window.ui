@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <interface>
   <object class="AdwApplicationWindow" id="window">
     <property name="default-width">800</property>
@@ -458,44 +458,16 @@
                     </child>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkActionBar">
-                    <child type="start">
-                      <object class="GtkToggleButton" id="button_devtools">
-                        <property name="action-name">win.console</property>
-                        <property
-                          name="label"
-                          translatable="yes"
-                        >Console</property>
-                        <property
-                          name="tooltip-text"
-                          translatable="yes"
-                        >Show logs (Ctrl+Shift+K)</property>
-                      </object>
-                    </child>
-                    <child type="start">
-                      <object class="GtkButton" id="button_inspector">
-                        <property
-                          name="label"
-                          translatable="yes"
-                        >Inspector</property>
-                        <property
-                          name="tooltip-text"
-                          translatable="yes"
-                        >Open GTK Inspector (Ctrl+Shift+I)</property>
-                      </object>
-                    </child>
-                    <child type="start">
-                      <object class="GtkButton" id="button_library">
-                        <property
-                          name="label"
-                          translatable="yes"
-                        >Library</property>
-                        <property name="action-name">win.library</property>
-                        <property
-                          name="tooltip-text"
-                          translatable="yes"
-                        >Open Library of Demos and Examples (Ctrl+Shift+O)</property>
+                  <object class="GtkActionBar" id="action_bar_devtools">
+                    <child type="center">
+                      <object class="AdwViewSwitcher" id="inspector_switcher">
+                        <property name="stack">inspector_stack</property>
                       </object>
                     </child>
                     <child type="end">
@@ -513,14 +485,23 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child type="end">
-              <object class="GtkBox" id="devtools">
-                <!-- <property name="vexpand">true</property> -->
                 <child>
-                  <object class="VteTerminal" id="terminal">
-                    <property name="hexpand">true</property>
+                  <object class="GtkSeparator" />
+                </child>
+                <child>
+                  <object class="AdwViewStack" id="inspector_stack">
+                    <child>
+                      <object class="AdwViewStackPage">
+                        <property name="name">console</property>
+                        <property name="title">Console</property>
+                        <property name="icon-name">console</property>
+                        <property name="child">
+                          <object class="VteTerminal" id="console">
+                            <property name="hexpand">true</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -546,6 +527,10 @@
     <item>
       <attribute name="label" translatable="yes">Reset to Demo</attribute>
       <attribute name="action">win.reset</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Library</attribute>
+      <attribute name="action">win.library</attribute>
     </item>
     <submenu>
       <attribute name="label" translatable="yes">Platform Tools</attribute>

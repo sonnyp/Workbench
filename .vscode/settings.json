@@ -10,5 +10,8 @@
         ".flatpak": true,
         ".flatpak/**": true,
         "_build/**": true
-    }
+    },
+    "mesonbuild.configureOnOpen": false,
+    "mesonbuild.buildFolder": "_build",
+    "mesonbuild.mesonPath": "/home/sonny/Projects/Workbench/.flatpak/meson.sh"
 }

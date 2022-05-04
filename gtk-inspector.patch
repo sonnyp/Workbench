@@ -1,0 +1,119 @@
+From 6e7493b51ca3dc033c417f4796ac9d1fc40a7107 Mon Sep 17 00:00:00 2001
+From: Julian Sparber <julian@sparber.net>
+Date: Sat, 30 Apr 2022 18:07:08 +0200
+Subject: [PATCH] Expose inspector
+
+---
+ gtk/gtkwindow.c                | 19 +++++++++++++++++++
+ gtk/gtkwindow.h                |  3 +++
+ gtk/inspector/inspect-button.c |  6 ++++--
+ gtk/inspector/window.c         | 11 +++++++++++
+ 4 files changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/gtk/gtkwindow.c b/gtk/gtkwindow.c
+index 2ad8b17509..422cb543bc 100644
+--- a/gtk/gtkwindow.c
++++ b/gtk/gtkwindow.c
+@@ -6187,6 +6187,23 @@ gtk_window_set_interactive_debugging (gboolean enable)
+   gtk_window_set_debugging (display, enable, FALSE, FALSE, FALSE);
+ }
+ 
++/**
++ * gtk_window_get_inspector:
++ *
++ * Get the inspector. Incase if it wasn't clear. Stupid!
++ *
++ * The debugger offers access to the widget hierarchy of the application
++ * and to useful debugging tools.
++ *
++ *
++ * Returns: (transfer none): the inspector window
++ */
++GtkWidget *
++gtk_window_get_inspector(void) {
++  GdkDisplay *display = gdk_display_get_default ();
++  return gtk_inspector_window_get(display);
++}
++
+ static gboolean
+ inspector_keybinding_enabled (gboolean *warn)
+ {
+@@ -6238,6 +6255,8 @@ gtk_window_enable_debugging (GtkWindow *window,
+ {
+   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+   gboolean warn;
++  // Block the keybinding
++  return FALSE;
+ 
+   if (!inspector_keybinding_enabled (&warn))
+     return FALSE;
+diff --git a/gtk/gtkwindow.h b/gtk/gtkwindow.h
+index c60a1d426f..d9894049b2 100644
+--- a/gtk/gtkwindow.h
++++ b/gtk/gtkwindow.h
+@@ -251,6 +251,9 @@ void     gtk_window_destroy                (GtkWindow    *window);
+ GDK_AVAILABLE_IN_ALL
+ void     gtk_window_set_interactive_debugging (gboolean enable);
+ 
++GDK_AVAILABLE_IN_ALL
++GtkWidget * gtk_window_get_inspector(void);
++
+ GDK_AVAILABLE_IN_4_2
+ void     gtk_window_set_handle_menubar_accel (GtkWindow *window,
+                                               gboolean   handle_menubar_accel);
+diff --git a/gtk/inspector/inspect-button.c b/gtk/inspector/inspect-button.c
+index 1f91f67c2b..83ee3ce742 100644
+--- a/gtk/inspector/inspect-button.c
++++ b/gtk/inspector/inspect-button.c
+@@ -101,7 +101,8 @@ on_inspect_widget (GtkInspectorWindow *iw,
+ {
+   GtkWidget *widget;
+ 
+-  gtk_window_present (GTK_WINDOW (iw));
++  //gtk_window_present (GTK_WINDOW (iw));
++  //g_signal_emit_by_name(iw, "object-selected");
+ 
+   clear_flash (iw);
+ 
+@@ -114,7 +115,8 @@ on_inspect_widget (GtkInspectorWindow *iw,
+ static void
+ reemphasize_window (GtkWidget *window)
+ {
+-  gtk_window_present (GTK_WINDOW (window));
++  //gtk_window_present (GTK_WINDOW (window));
++  g_signal_emit_by_name(window, "object-selected");
+ }
+ 
+ static gboolean handle_event (GtkInspectorWindow *iw, GdkEvent *event);
+diff --git a/gtk/inspector/window.c b/gtk/inspector/window.c
+index a950233424..3da3b93eb1 100644
+--- a/gtk/inspector/window.c
++++ b/gtk/inspector/window.c
+@@ -77,6 +77,7 @@ static GParamSpec *properties[NUM_PROPERTIES];
+ 
+ enum {
+   EVENT,
++  OBJECT_SELECTED,
+   LAST_SIGNAL
+ };
+ 
+@@ -623,6 +624,16 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
+                               G_OBJECT_CLASS_TYPE (object_class),
+                               _gdk_marshal_BOOLEAN__POINTERv);
+ 
++  signals[OBJECT_SELECTED] = g_signal_new (g_intern_static_string ("object-selected"),
++                                 G_OBJECT_CLASS_TYPE (object_class),
++                                 G_SIGNAL_RUN_LAST,
++                                 0,
++                                 NULL,
++                                 NULL,
++                                 NULL,
++                                 G_TYPE_NONE,
++                                 0);
++
+   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
+ 
+   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
+-- 
+2.35.1
+

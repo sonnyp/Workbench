@@ -41,12 +41,24 @@
   <gresource prefix="/re/sonny/Workbench/icons/scalable/actions">
     <file
       preprocess="xml-stripblanks"
+      alias="adwaita-symbolic.svg"
+    >icons/adwaita-symbolic.svg</file>
+    <file
+      preprocess="xml-stripblanks"
       alias="code-symbolic.svg"
     >icons/code-symbolic.svg</file>
     <file
       preprocess="xml-stripblanks"
+      alias="console-symbolic.svg"
+    >icons/console-symbolic.svg</file>
+    <file
+      preprocess="xml-stripblanks"
       alias="external-link-symbolic.svg"
     >icons/external-link-symbolic.svg</file>
+    <file
+      preprocess="xml-stripblanks"
+      alias="globe-symbolic.svg"
+    >icons/globe-symbolic.svg</file>
     <file
       preprocess="xml-stripblanks"
       alias="moon-rounded-symbolic.svg"
@@ -59,6 +71,14 @@
       preprocess="xml-stripblanks"
       alias="preview-symbolic.svg"
     >icons/preview-symbolic.svg</file>
+    <file
+      preprocess="xml-stripblanks"
+      alias="record-screen-symbolic.svg"
+    >icons/record-screen-symbolic.svg</file>
+    <file
+      preprocess="xml-stripblanks"
+      alias="shapes-symbolic.svg"
+    >icons/shapes-symbolic.svg</file>
     <file
       preprocess="xml-stripblanks"
       alias="style-symbolic.svg"

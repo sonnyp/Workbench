@@ -8,8 +8,7 @@ const ERASE_SAVED_LINES = "\u001b[3J";
 const MOVE_CURSOR_HOME = "\u001b[H"; // 0,0
 const MAKE_CURSOR_INVISIBLE = "\u001b[?25l";
 
-export default function Terminal({ devtools, builder }) {
-  const terminal = builder.get_object("terminal");
+export default function Terminal({ terminal, builder }) {
 
   terminal.feed(MAKE_CURSOR_INVISIBLE);
   // terminal.set_cursor_blink_mode(Vte.CursorBlinkMode.ON);
@@ -34,28 +33,8 @@ export default function Terminal({ devtools, builder }) {
     // terminal.reset(true, true);
   }
 
-  function scrollToEnd() {
-    const adj = terminal.get_vadjustment();
-    adj.set_value(adj.get_upper());
-  }
-
-  const button_clear = builder.get_object("button_clear");
-  devtools.bind_property(
-    "visible",
-    button_clear,
-    "visible",
-    GObject.BindingFlags.SYNC_CREATE
-  );
-
-  devtools.connect("notify::visible", (self) => {
-    if (self.reveal_child) {
-      scrollToEnd();
-    }
-  });
-
   return {
     clear,
-    scrollToEnd,
     terminal,
   };
 }

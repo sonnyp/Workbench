@@ -31,8 +31,13 @@ export default function Window({ application }) {
   const builder = Gtk.Builder.new_from_resource(
     "/re/sonny/Workbench/window.ui"
   );
+  // FIXME: when to save gtkpaned position?
+  const paned = builder.get_object("paned");
 
-  const devtools = builder.get_object("devtools");
+  const action_bar_devtools = builder.get_object("action_bar_devtools");
+  const inspector_stack = builder.get_object("inspector_stack");
+  const console = builder.get_object("console");
+  const devtools = null; //setup_inspector();
 
   const window = builder.get_object("window");
   // window.add_css_class("devel");
@@ -47,10 +52,13 @@ export default function Window({ application }) {
 
   const documents = [];
 
-  const terminal = Terminal({ application, window, devtools, builder });
-
-  // FIXME: when to save gtkpaned position?
-  const paned = builder.get_object("paned");
+  const terminal = Terminal({
+    application,
+    window,
+    devtools,
+    terminal: console,
+    builder,
+  });
 
   // For some reasons those don't work
   // as builder properties
@@ -101,8 +109,6 @@ export default function Window({ application }) {
   const button_ui = builder.get_object("button_ui");
   const button_css = builder.get_object("button_css");
   const button_preview = builder.get_object("button_preview");
-  const button_devtools = builder.get_object("button_devtools");
-  const button_inspector = builder.get_object("button_inspector");
   const button_light = builder.get_object("button_light");
   const button_dark = builder.get_object("button_dark");
   button_dark.set_group(button_light);
@@ -173,23 +179,6 @@ export default function Window({ application }) {
     "visible",
     GObject.BindingFlags.SYNC_CREATE
   );
-
-  settings.bind(
-    "show-devtools",
-    button_devtools,
-    "active",
-    Gio.SettingsBindFlags.DEFAULT
-  );
-  button_devtools.bind_property(
-    "active",
-    devtools,
-    "visible",
-    GObject.BindingFlags.SYNC_CREATE
-  );
-
-  button_inspector.connect("clicked", () => {
-    Gtk.Window.set_interactive_debugging(true);
-  });
 
   source_view_ui.buffer.connect("changed", updatePreview);
   source_view_css.buffer.connect("changed", updatePreview);
@@ -348,7 +337,6 @@ export default function Window({ application }) {
       }
     } finally {
       button_run.set_sensitive(true);
-      terminal.scrollToEnd();
     }
   }
 
@@ -438,6 +426,76 @@ export default function Window({ application }) {
       text: _("Are you sure you want to discard your changes?"),
     });
   }
+
+  function setup_inspector() {
+    const inspector = Gtk.Window.get_inspector();
+    const stack = inspector.get_child();
+
+    const titlebar = inspector.get_titlebar();
+    inspector.set_titlebar(null);
+    const buttons = [
+      ...titlebar.get_first_child().get_first_child().get_first_child(),
+    ][1].get_first_child();
+    const button_select_object = buttons.get_first_child();
+
+    const button_clear = builder.get_object("button_clear");
+
+    const switch_object_view = buttons.get_last_child();
+    button_select_object.get_parent().remove(button_select_object);
+    switch_object_view.get_parent().remove(switch_object_view);
+
+    inspector.connect("object-selected", () => {
+      inspector_stack.set_visible_child_name("objects");
+    });
+
+    switch_object_view.visible =
+      inspector_stack.get_visible_child_name() === "objects";
+    button_clear.visible =
+      inspector_stack.get_visible_child_name() === "console";
+    inspector_stack.connect("notify::visible-child", () => {
+      switch_object_view.visible =
+        inspector_stack.get_visible_child_name() === "objects";
+      button_clear.visible =
+        inspector_stack.get_visible_child_name() === "console";
+    });
+
+    action_bar_devtools.pack_start(button_select_object);
+    action_bar_devtools.pack_start(switch_object_view);
+    inspector.set_child(null);
+
+    let child;
+    while ((child = stack.get_first_child())) {
+      const page = stack.get_page(child);
+      stack.remove(child);
+
+      if (page.get_name() === "css") continue;
+
+      const view_page = inspector_stack.add_titled(
+        child,
+        page.get_name(),
+        page.get_title()
+      );
+      switch (page.get_name()) {
+        case "objects":
+          view_page.icon_name = "shapes-symbolic";
+          break;
+        case "global":
+          view_page.icon_name = "globe-symbolic";
+          break;
+        case "css":
+          view_page.icon_name = "style-symbolic";
+          break;
+        case "recorder":
+          view_page.icon_name = "record-screen-symbolic";
+          break;
+        case "libadwaita":
+          view_page.icon_name = "adwaita-symbolic";
+          break;
+      }
+    }
+  }
+
+  setup_inspector();
 
   const text_decoder = new TextDecoder();
   function openFile(file) {
