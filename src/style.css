@@ -9,3 +9,9 @@ combobox#dropdown_ui_lang button {
   padding-bottom: 2px;
   min-height: 30px;
 }
+
+box.panel {
+  background-color: @headerbar_bg_color;
+  color: @headerbar_fg_color;
+  border-color: @headerbar_border_color;
+}

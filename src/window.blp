@@ -154,37 +154,49 @@ Gtk.ApplicationWindow window {
         Box panel_code {
           orientation: vertical;
 
-          CenterBox {
-            [start]
-            Box {
-              Label {
-                label: _("<b>Code -</b>");
-                use-markup: true;
-                styles ["dim-label"]
+          Box {
+
+            CenterBox {
+              hexpand: true;
+
+              [start]
+              Box {
+                Label {
+                  label: _("<b>Code -</b>");
+                  use-markup: true;
+                  styles ["dim-label"]
+                }
+                DropDown dropdown_code_lang {
+                  model: StringList {
+                    strings [
+                      "JavaScript",
+                      "Vala",
+                    ]
+                  };
+                }
               }
-              DropDown dropdown_code_lang {
-                model: StringList {
-                  strings [
-                    "JavaScript",
-                    "Vala",
-                  ]
+
+              [end]
+              Button button_run {
+                child: Adw.ButtonContent {
+                  icon-name: "media-playback-start-symbolic";
+                  label: _("_Run");
+                  use-underline: true;
                 };
+                action-name: "win.run";
+                tooltip-text: _("Run (Ctrl+⏎)");
+                styles ["suggested-action"]
               }
+
+              styles ["toolbar"]
             }
 
-            [end]
-            Button button_run {
-              child: Adw.ButtonContent {
-                icon-name: "media-playback-start-symbolic";
-                label: _("_Run");
-                use-underline: true;
-              };
-              action-name: "win.run";
-              tooltip-text: _("Run (Ctrl+⏎)");
-              styles ["suggested-action"]
+            Separator {
+              margin-top: 8;
+              margin-bottom: 8;
             }
 
-            styles ["toolbar"]
+            styles ["panel"]
           }
 
           Separator {
@@ -246,17 +258,28 @@ Gtk.ApplicationWindow window {
         Box panel_style {
           orientation: vertical;
 
-          CenterBox {
-            height-request: 46;
+          Box {
 
-            [start]
-            Label {
-              label: _("<b>Style - CSS</b>");
-              use-markup: true;
-              styles ["dim-label"]
+            CenterBox {
+              height-request: 46;
+              hexpand: true;
+
+              [start]
+              Label {
+                label: _("<b>Style - CSS</b>");
+                use-markup: true;
+                styles ["dim-label"]
+              }
+
+              styles ["toolbar"]
             }
 
-            styles ["toolbar"]
+            Separator {
+              margin-top: 8;
+              margin-bottom: 8;
+            }
+
+            styles ["panel"]
           }
 
           Separator {
@@ -292,37 +315,49 @@ Gtk.ApplicationWindow window {
         Box panel_ui {
           orientation: vertical;
 
-          CenterBox {
-            [start]
-            Box {
-              Label {
-                label: _("<b>UI -</b>");
-                use-markup: true;
-                styles ["dim-label"]
+          Box {
+
+            CenterBox {
+              hexpand: true;
+
+              [start]
+              Box {
+                Label {
+                  label: _("<b>UI -</b>");
+                  use-markup: true;
+                  styles ["dim-label"]
+                }
+                Gtk.ComboBoxText dropdown_ui_lang {
+                  // FIXME: Does not work as intended
+                  // active-id: "xml";
+                  // the XML counterpart works fine
+                  // fix or report issue to Blueprint
+                  // <child>
+                  //   <object class="GtkComboBoxText" id="dropdown_ui_lang">
+                  //     <property name="active_id">xml</property>
+                  //     <items>
+                  //       <item id="xml">XML</item>
+                  //       <item id="blueprint">Blueprint</item>
+                  //     </items>
+                  //   </object>
+                  // </child>
+                  name: "dropdown_ui_lang";
+                  items [
+                    blueprint: "Blueprint",
+                    xml: "XML",
+                  ]
+                }
               }
-              Gtk.ComboBoxText dropdown_ui_lang {
-                // FIXME: Does not work as intended
-                // active-id: "xml";
-                // the XML counterpart works fine
-                // fix or report issue to Blueprint
-                // <child>
-                //   <object class="GtkComboBoxText" id="dropdown_ui_lang">
-                //     <property name="active_id">xml</property>
-                //     <items>
-                //       <item id="xml">XML</item>
-                //       <item id="blueprint">Blueprint</item>
-                //     </items>
-                //   </object>
-                // </child>
-                name: "dropdown_ui_lang";
-                items [
-                  blueprint: "Blueprint",
-                  xml: "XML",
-                ]
-              }
+
+              styles ["toolbar"]
             }
 
-            styles ["toolbar"]
+            Separator {
+              margin-top: 8;
+              margin-bottom: 8;
+            }
+
+            styles ["panel"]
           }
 
           Separator {
@@ -386,24 +421,36 @@ Gtk.ApplicationWindow window {
         Box panel_preview {
           orientation: vertical;
 
-          CenterBox {
-            [start]
-            Label {
-              label: _("<b>Preview</b>");
-              use-markup: true;
-              styles ["dim-label"]
-            }
+          Box {
 
-            [end]
-            Button button_screenshot {
-              icon-name: "photo-camera-symbolic";
-              tooltip-text: _("Take Screenshot of Preview");
-              accessibility {
-                label: _("Take Screenshot of Preview");
+            CenterBox {
+              hexpand: true;
+
+              [start]
+              Label {
+                label: _("<b>Preview</b>");
+                use-markup: true;
+                styles ["dim-label"]
               }
+
+              [end]
+              Button button_screenshot {
+                icon-name: "photo-camera-symbolic";
+                tooltip-text: _("Take Screenshot of Preview");
+                accessibility {
+                  label: _("Take Screenshot of Preview");
+                }
+              }
+
+              styles ["toolbar"]
             }
 
-            styles ["toolbar"]
+            Separator {
+              margin-top: 8;
+              margin-bottom: 8;
+            }
+
+            styles ["panel"]
           }
 
           Separator {
